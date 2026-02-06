@@ -1,36 +1,21 @@
-import User from '../modules/users/user.model.js';
-import jwt from 'jsonwebtoken';
 import type { Request, Response, NextFunction } from 'express';
-import asyncHandler from 'express-async-handler';
 import { UnauthorizedError } from '../lib/error.js';
 import { env } from '../config/env.js';
-import { JwtPayload } from 'jsonwebtoken';
 
-export const authenticate = asyncHandler(
-  async (req: Request, _res: Response, next: NextFunction) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
-      throw new UnauthorizedError('Not authorized, no token provided');
-    }
+export function basicAuth(req: Request, _res: Response, next: NextFunction) {
+  const authHeader = req.headers.authorization;
 
-    const token = authHeader.split(' ')[1];
+  if (!authHeader || !authHeader.startsWith('Basic ')) {
+    return next(new UnauthorizedError('Basic auth required'));
+  }
 
-    try {
-      const payload = jwt.verify(token, env.JWT_SECRET) as JwtPayload;
-      const user = await User.findById(payload._id).select('_id name email');
+  const base64Credentials = authHeader.split(' ')[1];
+  const credentials = Buffer.from(base64Credentials, 'base64').toString('utf-8');
 
-      if (!user) {
-        throw new UnauthorizedError('Not authorized, user not found');
-      }
-      req.user = {
-        _id: user._id.toString(),
-        name: user.name,
-        email: user.email,
-      };
+  const [email, password] = credentials.split(':');
+  if (email !== env.BASIC_AUTH_EMAIL || password !== env.BASIC_AUTH_PASS) {
+    return next(new UnauthorizedError('Invalid basic auth credentials'));
+  }
 
-      next();
-    } catch {
-      throw new UnauthorizedError('Not authorized, invalid token');
-    }
-  },
-);
+  next();
+}

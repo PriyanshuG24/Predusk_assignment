@@ -5,6 +5,7 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
+    "seed": "tsx src/scripts/seed.ts",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
@@ -26,6 +27,7 @@
     "dotenv": "^17.2.3",
     "express": "^4.22.1",
     "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.6",

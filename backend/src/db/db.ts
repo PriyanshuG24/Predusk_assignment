@@ -4,7 +4,7 @@ import { logger } from "../lib/logger.js";
 
 export async function connectDatabase() {
   try {
-    await mongoose.connect(env.MONGODB_URI || 'mongodb://localhost:27017/test');
+    await mongoose.connect(env.MONGODB_URI || "mongodb://localhost:27017/test");
     logger.info("Connected to MongoDB1");
   } catch (err) {
     logger.error("Failed to connect to MongoDB:", err);

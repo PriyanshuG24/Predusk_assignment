@@ -1,5 +1,5 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import argon2 from 'argon2';
+import mongoose, { Document, Schema } from "mongoose";
+import argon2 from "argon2";
 
 export interface IWork {
   title: string;
@@ -40,14 +40,15 @@ export interface IUser extends Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-const normalizeSkill = (v: unknown) => (typeof v === 'string' ? v.trim().toLowerCase() : v);
+const normalizeSkill = (v: unknown) =>
+  typeof v === "string" ? v.trim().toLowerCase() : v;
 
 export const isValidHttpUrl = (value?: string) => {
   if (!value) return true;
   try {
     const u = new URL(value);
     console.log(u);
-    return u.protocol === 'http:' || u.protocol === 'https:';
+    return u.protocol === "http:" || u.protocol === "https:";
   } catch {
     return false;
   }
@@ -64,7 +65,7 @@ const userLinksSchema = new Schema<IUserLinks>({
     trim: true,
     validate: {
       validator: (v: string) => isValidHttpUrl(v),
-      message: 'github must be a valid http/https url',
+      message: "github must be a valid http/https url",
     },
   },
   linkedin: {
@@ -72,7 +73,7 @@ const userLinksSchema = new Schema<IUserLinks>({
     trim: true,
     validate: {
       validator: (v: string) => isValidHttpUrl(v),
-      message: 'linkedin must be a valid http/https url',
+      message: "linkedin must be a valid http/https url",
     },
   },
   portfolio: {
@@ -80,7 +81,7 @@ const userLinksSchema = new Schema<IUserLinks>({
     trim: true,
     validate: {
       validator: (v: string) => isValidHttpUrl(v),
-      message: 'portfolio must be a valid http/https url',
+      message: "portfolio must be a valid http/https url",
     },
   },
   codechef: {
@@ -88,7 +89,7 @@ const userLinksSchema = new Schema<IUserLinks>({
     trim: true,
     validate: {
       validator: (v: string) => isValidHttpUrl(v),
-      message: 'codechef link must be a valid http/https url',
+      message: "codechef link must be a valid http/https url",
     },
   },
   leetcode: {
@@ -96,7 +97,7 @@ const userLinksSchema = new Schema<IUserLinks>({
     trim: true,
     validate: {
       validator: (v: string) => isValidHttpUrl(v),
-      message: 'leetcode link must be a valid http/https url',
+      message: "leetcode link must be a valid http/https url",
     },
   },
 });
@@ -109,7 +110,7 @@ const projectLinkSchema = new Schema<IProjectLink>({
     trim: true,
     validate: {
       validator: (v: string) => isValidHttpUrl(v),
-      message: 'project link url must be a valid http/https url',
+      message: "project link url must be a valid http/https url",
     },
   },
 });
@@ -120,7 +121,8 @@ const projectSchema = new Schema<IProject>({
   skills: {
     type: [String],
     default: [],
-    set: (arr: unknown) => (Array.isArray(arr) ? arr.map(normalizeSkill).filter(Boolean) : []),
+    set: (arr: unknown) =>
+      Array.isArray(arr) ? arr.map(normalizeSkill).filter(Boolean) : [],
   },
   links: { type: [projectLinkSchema], default: [] },
 });
@@ -138,7 +140,7 @@ const userSchema = new Schema<IUser>(
       maxlength: 150,
       validate: {
         validator: (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
-        message: 'Invalid email format',
+        message: "Invalid email format",
       },
     },
 
@@ -149,7 +151,8 @@ const userSchema = new Schema<IUser>(
     skills: {
       type: [String],
       default: [],
-      set: (arr: unknown) => (Array.isArray(arr) ? arr.map(normalizeSkill).filter(Boolean) : []),
+      set: (arr: unknown) =>
+        Array.isArray(arr) ? arr.map(normalizeSkill).filter(Boolean) : [],
     },
 
     work: { type: [workSchema], default: [] },
@@ -162,26 +165,28 @@ const userSchema = new Schema<IUser>(
 );
 
 userSchema.index({ skills: 1 });
-userSchema.index({ 'projects.skills': 1 });
+userSchema.index({ "projects.skills": 1 });
 
 userSchema.index({
-  name: 'text',
-  education: 'text',
-  skills: 'text',
-  'projects.title': 'text',
-  'projects.description': 'text',
-  'work.title': 'text',
-  'work.description': 'text',
+  name: "text",
+  education: "text",
+  skills: "text",
+  "projects.title": "text",
+  "projects.description": "text",
+  "work.title": "text",
+  "work.description": "text",
 });
 
-userSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   this.password = await argon2.hash(this.password);
 });
 
-userSchema.methods.comparePassword = async function (candidatePassword: string) {
+userSchema.methods.comparePassword = async function (
+  candidatePassword: string,
+) {
   return argon2.verify(this.password, candidatePassword);
 };
 
-const User = mongoose.model<IUser>('UserPredusk', userSchema);
+const User = mongoose.model<IUser>("UserPredusk", userSchema);
 export default User;

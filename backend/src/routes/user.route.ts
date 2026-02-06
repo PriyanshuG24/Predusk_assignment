@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { Request, Response, NextFunction } from 'express';
+import { Router } from "express";
+import { Request, Response, NextFunction } from "express";
 import {
   getUserProfile,
   updateUserProfile,
@@ -8,16 +8,16 @@ import {
   deleteProjectById,
   addProject,
   updateProject,
-} from '../modules/users/user.service.js';
-import { basicAuth } from '../middleware/authMiddleware.js';
-import { BadRequestError } from '../lib/error.js';
-import { env } from '../config/env.js';
-import User from '../modules/users/user.model.js';
-import { readLimiter, writeLimiter } from '../middleware/rateLimiter.js';
+} from "../modules/users/user.service.js";
+import { basicAuth } from "../middleware/authMiddleware.js";
+import { BadRequestError } from "../lib/error.js";
+import { env } from "../config/env.js";
+import User from "../modules/users/user.model.js";
+import { readLimiter, writeLimiter } from "../middleware/rateLimiter.js";
 export const userRouter = Router();
 
 userRouter.get(
-  '/profile',
+  "/profile",
   readLimiter,
   basicAuth,
   async (_req: Request, res: Response, next: NextFunction) => {
@@ -34,7 +34,7 @@ userRouter.get(
 );
 
 userRouter.put(
-  '/profile',
+  "/profile",
   writeLimiter,
   basicAuth,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -51,7 +51,7 @@ userRouter.put(
 );
 
 userRouter.post(
-  '/work',
+  "/work",
   writeLimiter,
   basicAuth,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -71,12 +71,12 @@ userRouter.post(
 );
 
 userRouter.put(
-  '/links',
+  "/links",
   writeLimiter,
   basicAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log('PUT links request:', req.body.links);
+      console.log("PUT links request:", req.body.links);
       const user = await updateUserLinks(req.body.links);
       res.status(200).json({
         success: true,
@@ -91,7 +91,7 @@ userRouter.put(
 );
 
 userRouter.delete(
-  '/project/delete',
+  "/project/delete",
   writeLimiter,
   basicAuth,
   async (req: Request, res: Response, next: NextFunction) => {
@@ -111,14 +111,14 @@ userRouter.delete(
 );
 
 userRouter.post(
-  '/project/add',
+  "/project/add",
   writeLimiter,
   basicAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { title, description, skills, links } = req.body;
       if (!title || !description || !skills) {
-        throw new BadRequestError('All fields are required');
+        throw new BadRequestError("All fields are required");
       }
       const projects = await addProject({ title, description, skills, links });
       res.status(200).json({
@@ -134,19 +134,25 @@ userRouter.post(
 );
 
 userRouter.put(
-  '/project/update',
+  "/project/update",
   writeLimiter,
   basicAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { projectId, title, description, skills, links } = req.body;
       if (!projectId) {
-        throw new BadRequestError('Project ID is required');
+        throw new BadRequestError("Project ID is required");
       }
       if (!title || !description || !skills) {
-        throw new BadRequestError('All fields are required');
+        throw new BadRequestError("All fields are required");
       }
-      const projects = await updateProject({ projectId, title, description, skills, links });
+      const projects = await updateProject({
+        projectId,
+        title,
+        description,
+        skills,
+        links,
+      });
       res.status(200).json({
         success: true,
         data: {
@@ -160,12 +166,12 @@ userRouter.put(
 );
 
 userRouter.get(
-  '/project/search',
+  "/project/search",
   readLimiter,
   basicAuth,
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { searchQuery, skills, page = '1', limit = '4' } = req.query;
+      const { searchQuery, skills, page = "1", limit = "4" } = req.query;
 
       const currentPage = parseInt(page as string) || 1;
       const pageSize = parseInt(limit as string) || 4;
@@ -173,35 +179,44 @@ userRouter.get(
 
       let allProjects;
 
-      if (skills && searchQuery && typeof skills === 'string' && typeof searchQuery === 'string') {
-        const skillArray = skills.split(',').map((s) => s.trim().toLowerCase());
+      if (
+        skills &&
+        searchQuery &&
+        typeof skills === "string" &&
+        typeof searchQuery === "string"
+      ) {
+        const skillArray = skills.split(",").map((s) => s.trim().toLowerCase());
         const user = await User.findOne({ email: env.BASIC_AUTH_EMAIL });
 
         if (!user) {
-          throw new BadRequestError('User not found');
+          throw new BadRequestError("User not found");
         }
         const query = searchQuery.toLowerCase().trim();
         allProjects = user.projects.filter(
           (project) =>
-            project.skills.some((skill) => skillArray.includes(skill.toLowerCase())) &&
+            project.skills.some((skill) =>
+              skillArray.includes(skill.toLowerCase()),
+            ) &&
             (project.title.toLowerCase().includes(query) ||
               project.description.toLowerCase().includes(query)),
         );
-      } else if (skills && typeof skills === 'string') {
-        const skillArray = skills.split(',').map((s) => s.trim().toLowerCase());
+      } else if (skills && typeof skills === "string") {
+        const skillArray = skills.split(",").map((s) => s.trim().toLowerCase());
         const user = await User.findOne({ email: env.BASIC_AUTH_EMAIL });
 
         if (!user) {
-          throw new BadRequestError('User not found');
+          throw new BadRequestError("User not found");
         }
         allProjects = user.projects.filter((project) =>
-          project.skills.some((skill) => skillArray.includes(skill.toLowerCase())),
+          project.skills.some((skill) =>
+            skillArray.includes(skill.toLowerCase()),
+          ),
         );
-      } else if (searchQuery && typeof searchQuery === 'string') {
+      } else if (searchQuery && typeof searchQuery === "string") {
         const user = await User.findOne({ email: env.BASIC_AUTH_EMAIL });
 
         if (!user) {
-          throw new BadRequestError('User not found');
+          throw new BadRequestError("User not found");
         }
 
         const query = searchQuery.toLowerCase().trim();
@@ -214,7 +229,7 @@ userRouter.get(
         const user = await User.findOne({ email: env.BASIC_AUTH_EMAIL });
 
         if (!user) {
-          throw new BadRequestError('User not found');
+          throw new BadRequestError("User not found");
         }
 
         allProjects = user.projects;

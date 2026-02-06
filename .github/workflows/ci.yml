@@ -33,6 +33,10 @@ jobs:
 
       - name: Run tests
         working-directory: backend
+        env:
+          NODE_ENV: test
+          BASIC_AUTH_EMAIL: test@example.com
+          BASIC_AUTH_PASS: testpass
         run: npm run test:ci
 
       - name: Build

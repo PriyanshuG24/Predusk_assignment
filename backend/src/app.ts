@@ -12,7 +12,7 @@ export function createApp() {
   app.use(helmet());
   app.use(
     cors({
-      origin: ["http://localhost:3000","https://predusk-assignment-seven.vercel.app/"],
+      origin: ["http://localhost:3000","https://predusk-assignment-seven.vercel.app"],
       credentials: true,
     }),
   );

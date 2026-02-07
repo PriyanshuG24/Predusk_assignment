@@ -14,11 +14,8 @@ const Work = (props: { work: Work[] }) => {
         method: "POST",
         body: { title: workTitle, description: workDesc },
       });
-      console.log(response);
-      setWork([
-        ...work,
-        { _id: response.data._id, title: workTitle, description: workDesc },
-      ]);
+      const newWork = response.data.work[response.data.work.length - 1];
+      setWork([...work, newWork]);
       setWorkTitle("");
       setWorkDesc("");
     } catch (e: unknown) {

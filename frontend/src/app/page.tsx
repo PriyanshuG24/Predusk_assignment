@@ -94,7 +94,14 @@ export default function Home() {
         method: "PUT",
         body: { links },
       });
-      setLinks(data.data?.links || links);
+      setLinks((prev) => ({
+        ...prev,
+        github: data?.data?.links?.github || "",
+        linkedin: data?.data?.links?.linkedin || "",
+        portfolio: data?.data?.links?.portfolio || "",
+        codechef: data?.data?.links?.codechef || "",
+        leetcode: data?.data?.links?.leetcode || "",
+      }));
       toast.success("Links updated successfully");
     } catch (e: unknown) {
       console.log(e);

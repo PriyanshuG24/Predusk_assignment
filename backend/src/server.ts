@@ -7,7 +7,6 @@ import http from "node:http";
 async function boostrap() {
   try {
     await assertDatabaseConnection();
-
     const app = createApp();
     const server = http.createServer(app);
 

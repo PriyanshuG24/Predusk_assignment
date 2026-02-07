@@ -28,8 +28,6 @@ const ProjectComponent = (props: { projects: Project[] }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize] = useState(4);
-
-  const [selectedProjectId, setSelectedProjectId] = useState("");
   const [projLinkLabel, setProjLinkLabel] = useState("");
   const [projLinkUrl, setProjLinkUrl] = useState("");
   const [projectLinks, setProjectLinks] = useState<
@@ -387,7 +385,7 @@ const ProjectComponent = (props: { projects: Project[] }) => {
           <div className="flex gap-3 mt-6">
             <button
               onClick={editingProject ? handleUpdateProject : handleAddProject}
-              className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all font-medium shadow-lg"
+              className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-blue-600 text-white rounded-xl font-medium shadow-lg"
             >
               <Save className="w-4 h-4" />
               {editingProject ? "Update" : "Add"} Project

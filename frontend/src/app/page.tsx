@@ -145,7 +145,7 @@ export default function Home() {
           <header className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <div className="w-12 h-12 bg-indigo-600  rounded-xl flex items-center justify-center">
                   <User className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -169,7 +169,7 @@ export default function Home() {
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
+                <div className="w-14 h-14 bg-indigo-600 hover:bg-blue-600 rounded-xl flex items-center justify-center">
                   <User className="w-7 h-7 text-white" />
                 </div>
                 <div>
@@ -208,7 +208,7 @@ export default function Home() {
                       (s) => (
                         <span
                           key={s}
-                          className="px-3 py-1 bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 rounded-full text-sm font-medium border border-indigo-100"
+                          className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium border border-indigo-100"
                         >
                           {s}
                         </span>
@@ -219,7 +219,7 @@ export default function Home() {
 
                 <button
                   onClick={handleUpdateProfile}
-                  className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all font-medium shadow-lg"
+                  className="w-full bg-indigo-600 hover:bg-blue-600 text-white px-4 py-3 rounded-xl  font-medium shadow-lg"
                 >
                   Save Profile
                 </button>
@@ -293,7 +293,7 @@ export default function Home() {
 
               <button
                 onClick={handleUpdateLinks}
-                className="w-full mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all font-medium shadow-lg"
+                className="w-full mt-6 bg-indigo-600 hover:bg-blue-600 text-white px-4 py-3 rounded-xl font-medium shadow-lg"
               >
                 Save Links
               </button>

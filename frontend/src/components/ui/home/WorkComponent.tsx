@@ -83,7 +83,7 @@ const Work = (props: { work: Work[] }) => {
           </div>
           <button
             onClick={handleAddWork}
-            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all font-medium shadow-lg"
+            className="w-full  text-white px-4 py-3 rounded-xl bg-indigo-600 hover:bg-blue-600 font-medium shadow-lg"
           >
             Add Work Experience
           </button>
